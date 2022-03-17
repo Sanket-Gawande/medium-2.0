@@ -26,7 +26,7 @@ export default function Home({ posts  ,categories }) {
               src="/hero.png"
               width={400}
               height={300}
-              
+              alt="main bg"
             />
           </div>
           <h1 className="font-extrathin xl:text-8xl font-serif my-8 text-black text-7xl">
@@ -36,7 +36,7 @@ export default function Home({ posts  ,categories }) {
             Discover stories, thinking, and expertise from writers on any topic.
           </p>
           <li className="my-8 w-48 list-none text-center py-2 text-white bg-black rounded-full">
-            <Link href="/"> Start reading</Link>
+            <Link href="/" passHref> Start reading</Link>
           </li>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default function Home({ posts  ,categories }) {
 
       <div className=" py-8 md:py-16 px-8  mx-auto   max-w-6xl">
         <div className="flex items-center">
-          <Image width={25} height={25} src="/trending.png" />
+          <Image width={25} height={25} src="/trending.png" alt="icon"/>
           <h4 className="text-grey-400 ml-2 uppercase text-sm">
             Trending on medium
           </h4>

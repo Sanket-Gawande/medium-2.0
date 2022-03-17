@@ -17,19 +17,20 @@ const Post = ({ post }) => {
       <div className=" px-3 flex mr-4 flex-col justify-start w-full">
         {/* name and profile */}
         <div className="flex p-2 space-x-4 items-center">
-          <img
-            src={urlFor(post.author.profile)} //"/jessica.jpeg"
+          <Image
+            src={urlFor(post.author.profile).url()} //"/jessica.jpeg"
             className="rounded-full"
             width={25}
             height={25}
+            alt="profile"
           />
 
           <p className=" text-sm">{post.author.name}</p>
         </div>
-        <Link href={`/post/${post.slug.current}`}>
+        <Link passHref href={`/post/${post.slug.current}`}>
           <h4 className="font-extrabold my-1">{post.heading}</h4>
         </Link>
-        <Link href={`/post/${post.slug.current}`}>
+        <Link passHref href={`/post/${post.slug.current}`}>
           <p className="text-gray-400 my-2 ">{post.desc}</p>
         </Link>
         <div className="text-gray-900 font-serif  font-extralight  flex justify-between items-center text-[12px] space-x-2">
@@ -40,7 +41,7 @@ const Post = ({ post }) => {
               {post.category || "education"}
             </span>
           </div>
-          <img
+          <Image
             src="/icons/save.svg"
             alt="save it"
             className="w-6 h-6"
@@ -50,11 +51,12 @@ const Post = ({ post }) => {
       </div>
       {/* poster div */}
       <div className="w-96 ">
-        <img
-          src={urlFor(post?.poster)}
+        <Image
+          src={urlFor(post?.poster).url()}
           width="100%"
           height="100%"
           className="aspect-video"
+          alt="poster"
         />
       </div>
     </div>

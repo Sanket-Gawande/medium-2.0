@@ -8,6 +8,7 @@ const TrendingItem = ({ post, index }) => {
   return (
     <Link
       href={`/post/${post.slug.current}`}
+      passHref
       >
       <div className="flex my-4 cursor-pointer">
         <h1 className="w-8 px-2 py-1  font-extrabold text-gray-400 text-2xl">
@@ -15,10 +16,12 @@ const TrendingItem = ({ post, index }) => {
         </h1>
         <div className="px-3 flex flex-col justify-start">
           <div className="flex p-2 space-x-4 items-center">
-            <img
-              src={urlFor(post.poster)}
+           
+            <Image
+              src={urlFor(post.author.profile).url()}
               className="rounded-full"
               width={25}
+              alt="post"
               height={25}
             />
             <p className=" text-sm">{post.author.name}</p>
