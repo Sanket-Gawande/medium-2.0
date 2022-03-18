@@ -88,7 +88,7 @@ const postid = ({ post }) => {
               </span>
             </div>
           </div>
-          {Router.isFallback && <H1>Loading..</H1>}
+          {Router.isFallback && <h1>Loading..</h1>}
           <h1 className="text-2xl font-bold my-4">{post.heading}</h1>
           <p className="text-gray-800 font-serif"> by {post.author.name}</p>
           <h4 className="my-4"> {post.desc}</h4>
