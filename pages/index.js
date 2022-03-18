@@ -45,7 +45,7 @@ export default function Home({ posts  ,categories }) {
       
       {/* trending post section here */}
 
-      <div className=" py-8 md:py-16 px-8  mx-auto   max-w-6xl">
+      <div className=" py-8 md:py-16 px-8  mx-auto mb-8  max-w-6xl">
         <div className="flex items-center">
           <Image width={25} height={25} src="/trending.png" alt="icon"/>
           <h4 className="text-grey-400 ml-2 uppercase text-sm">
@@ -68,11 +68,11 @@ export default function Home({ posts  ,categories }) {
       <div className="md:py-8 flex md:justify-between flex-col md:flex-row md:px-4 w-full max-w-7xl mx-auto ">
     
      {/*  categories/tags section */}
-      <div className="w-full  md:ml-8 md:w-4/12 xl:w-5/12 md:order-2 flex flex-wrap space-x-4 h-0  py-6 mb-8  px-2">
+      <div className="w-full  md:ml-8 md:w-4/12 xl:w-5/12 md:order-2 flex flex-wrap space-x-4   py-4   px-2">
 {categories?.map(cat => <Link key={cat} href={`post/category/${cat}`}><li className=" cursor-pointer list-none m-0  my-2  bg-white border rounded-md px-4 py-1 text-sm  border-gray-200">{cat}</li></Link>)}
       </div>
       <hr/>
-      <div className="py-4  w-full  space-y-8 px-10 md:w-7/12 xl:6/12">
+      <div className="py-4  w-full  h-8 space-y-8 px-2  md:px-10 md:w-7/12 xl:6/12">
        {posts.map(post => {
          return <Post key={post._id} post={post}/>
        })}
@@ -83,7 +83,7 @@ export default function Home({ posts  ,categories }) {
   );
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const postsQuery = `*[ _type == "post"]{
     heading , 
     desc,
@@ -102,5 +102,6 @@ export const getServerSideProps = async () => {
      posts,
      categories : ["self" , "education" , "war" , "data-science" , "programming"]
     },
+    revalidate : 60*60,
   };
 };

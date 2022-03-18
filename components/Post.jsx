@@ -12,7 +12,7 @@ const Post = ({ post }) => {
   }
 
   return (
-    <div className="flex justify-between items-center  cursor-pointer">
+    <div className="flex  justify-between items-center  cursor-pointer">
       {/* content div  */}
       <div className=" px-3 flex mr-4 flex-col justify-start w-full">
         {/* name and profile */}
@@ -45,17 +45,19 @@ const Post = ({ post }) => {
             src="/icons/save.svg"
             alt="save it"
             className="w-6 h-6"
+            width="1.5rem"
+            height ="1.5rem"
             onClick={(e) => savePost(e, post._id)}
           />
         </div>
       </div>
       {/* poster div */}
-      <div className="w-96 ">
+      <div className="w-2/4 md:w-[280px]">
         <Image
           src={urlFor(post?.poster).url()}
-          width="100%"
-          height="100%"
-          className="aspect-video"
+          width={400}
+          height={250}
+          className="aspect-video hover:scale-110 transition-all duration-300"
           alt="poster"
         />
       </div>
