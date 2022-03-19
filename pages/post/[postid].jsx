@@ -14,7 +14,7 @@ import {
   AiOutlineFileText,
 } from "react-icons/ai";
 import { FiBell, FiEdit } from "react-icons/fi";
-const postid = ({ post, comments }) => {
+const Postid = ({ post, comments }) => {
   const [showForm, setShowForm] = useState(true);
   const { postid } = useRouter().query;
   const {
@@ -259,7 +259,7 @@ const postid = ({ post, comments }) => {
             <div className="my-8 w-full">
               {comments?.map((obj) => {
                 return (
-                  <div className="border-l-lime-600 border-l-4  relative rounded border-gray-400  border my-4 px-4 py-2">
+                  <div key={obj._id} className="border-l-lime-600 border-l-4  relative rounded border-gray-400  border my-4 px-4 py-2">
                     <h4 className="py-2 font-bold"> {obj.name}</h4>
                     <p className="text-slate-600">{obj.comment}</p>
                     <span className="block text-right text-sm5 text-slate-500">{Formatted(obj._createdAt)}</span>
@@ -330,32 +330,17 @@ const postid = ({ post, comments }) => {
   );
 };
 
-export default postid;
+export default Postid;
 
-export const getStaticPaths = async () => {
-  const query = `*[ _type == "post" ]{slug}`;
-  const data = await client.fetch(query);
-  const paths = data.map((obj) => {
-    return {
-      params: {
-        postid: obj.slug.current,
-      },
-    };
-  });
-  return {
-    paths: paths,
-    fallback: true,
-  };
-};
 
-export const getStaticProps = async (req, res) => {
+export const getServerSideProps = async (req, res) => {
   const { postid } = req.params;
   const query = `*[ _type == "post" && slug.current =="${postid}"]{
     heading , desc , content , author -> {_id , name , profile}, _createdAt,poster
   }`;
   const post = await client.fetch(query);
 
-  const commentQuery = `*[ _type == "comments" && post_id == "${postid}"]`;
+  const commentQuery = `*[ _type == "comments" && post_id == "${postid}"]{name , _id , _createdAt , comment , email}`;
   const comments = await client.fetch(commentQuery);
 
   
