@@ -3,13 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "../components/Header";
 
-
 import { client, urlFor } from "../sanityClient";
 import TrendingItem from "../components/TrendingItem";
 import Post from "../components/Post";
 
-export default function Home({ posts  ,categories }) {
-      
+export default function Home({ posts, categories }) {
   return (
     <div className="h-screen">
       <Head>
@@ -22,12 +20,7 @@ export default function Home({ posts  ,categories }) {
       <div className="hero mt-16 px-8  md:px-16 pt-16 w-full bg-yellow-400 border-b-2 border-gray-900">
         <div className="  w-full h-96 relative first-letter max-w-6xl mx-auto ">
           <div className="absolute right-0 bottom-0 hidden md:block">
-            <Image
-              src="/hero.png"
-              width={400}
-              height={300}
-              alt="main bg"
-            />
+            <Image src="/hero.png" width={400} height={300} alt="main bg" />
           </div>
           <h1 className="font-extrathin xl:text-8xl font-serif my-8 text-black text-7xl">
             Stay curious
@@ -36,49 +29,52 @@ export default function Home({ posts  ,categories }) {
             Discover stories, thinking, and expertise from writers on any topic.
           </p>
           <li className="my-8 w-48 list-none text-center py-2 text-white bg-black rounded-full">
-            <Link href="/" passHref> Start reading</Link>
+            <Link href="/" passHref>
+              Start reading
+            </Link>
           </li>
         </div>
       </div>
       {/* <Image src={urlFor(response[0].poster)} layout="responsive" /> */}
-      
-      
+
       {/* trending post section here */}
 
       <div className=" py-8 md:py-16 px-8  mx-auto mb-8  max-w-6xl">
         <div className="flex items-center">
-          <Image width={25} height={25} src="/trending.png" alt="icon"/>
+          <Image width={25} height={25} src="/trending.png" alt="icon" />
           <h4 className="text-grey-400 ml-2 uppercase text-sm">
             Trending on medium
           </h4>
         </div>
 
         <div className="w-full grid grid-cols-1 mt-4   gap-4 grid-rows-6 justify-center md:grid-cols-2 md:grid-rows-3 xl:grid-cols-3 xl:grid-rows-2">
-          {posts.map((post , index) => {
-            return <TrendingItem key={post._id} post={post}  index={index}/>;
+          {posts.map((post, index) => {
+            return <TrendingItem key={post._id} post={post} index={index} />;
           })}
         </div>
       </div>
       <hr />
 
-
       {/* categories and post section  */}
 
-      
       <div className="md:py-8 flex md:justify-between flex-col md:flex-row md:px-4 w-full max-w-7xl mx-auto ">
-    
-     {/*  categories/tags section */}
-      <div className="w-full  md:ml-8 md:w-4/12 xl:w-5/12 md:order-2 flex flex-wrap space-x-4   py-4   px-2">
-{categories?.map(cat => <Link key={cat} href={`post/category/${cat}`}><li className=" cursor-pointer list-none m-0  my-2  bg-white border rounded-md px-4 py-1 text-sm  border-gray-200">{cat}</li></Link>)}
+        {/*  categories/tags section */}
+        <div className="w-full  md:ml-8 md:w-4/12 xl:w-5/12 md:order-2 flex flex-wrap space-x-4   py-4   px-2">
+          {categories?.map((cat) => (
+            <Link key={cat} href={`post/category/${cat}`}>
+              <li className=" cursor-pointer list-none m-0  my-2  bg-white border rounded-md px-4 py-1 text-sm  border-gray-200">
+                {cat}
+              </li>
+            </Link>
+          ))}
+        </div>
+        <hr />
+        <div className="py-4  pb-8  w-full  space-y-8 px-2  md:px-10 md:w-7/12 xl:6/12">
+          {posts.map((post) => {
+            return <Post key={post._id} post={post} />;
+          })}
+        </div>
       </div>
-      <hr/>
-      <div className="py-4  w-full  h-8 space-y-8 px-2  md:px-10 md:w-7/12 xl:6/12">
-       {posts.map(post => {
-         return <Post key={post._id} post={post}/>
-       })}
-      </div>
-      
-    </div>
     </div>
   );
 }
@@ -99,9 +95,9 @@ export const getStaticProps = async () => {
   const posts = await client.fetch(postsQuery);
   return {
     props: {
-     posts,
-     categories : ["self" , "education" , "war" , "data-science" , "programming"]
+      posts,
+      categories: ["self", "education", "war", "data-science", "programming"],
     },
-    revalidate : 60*60,
+    revalidate: 60 * 60,
   };
 };

@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Router, useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { client, urlFor } from "../../sanityClient";
 import PortableText from "react-portable-text";
 import { Formatted } from "../../utils/formatDate";
-import { BsSave, bshome } from "react-icons/bs";
+import { BsSave } from "react-icons/bs";
+import { useForm } from "react-hook-form";
 import {
   AiOutlineHome,
   AiOutlineSearch,
@@ -13,7 +14,31 @@ import {
   AiOutlineFileText,
 } from "react-icons/ai";
 import { FiBell, FiEdit } from "react-icons/fi";
-const postid = ({ post }) => {
+const postid = ({ post, comments }) => {
+  const [showForm, setShowForm] = useState(true);
+  const { postid } = useRouter().query;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+  });
+
+  const submitForm = async (data) => {
+    data.slug = postid;
+    const { name, email, comment, slug } = data;
+    const response = await client.create({
+      _type: "comments",
+      name,
+      email,
+      post_id: slug,
+      comment,
+    });
+
+    setShowForm(false);
+  };
+
   return (
     <div>
       {/* // nav for  samller screns */}
@@ -108,14 +133,20 @@ const postid = ({ post }) => {
               content={post.content}
               serializers={{
                 normal: (props) => (
-                  <normal className=" break-words text-slate-700 font-serif text-lg" {...props} />
+                  <normal
+                    className=" break-words text-slate-700 font-serif text-lg"
+                    {...props}
+                  />
                 ),
                 h2: (props) => <h2 className="text-md " {...props} />,
                 h4: (props) => (
                   <h4 className="text-xl text-slate-900 my-4" {...props} />
                 ),
                 h6: (props) => (
-                  <h6 className=" text-slate-700 font-serif text-lg  my-4" {...props} />
+                  <h6
+                    className=" text-slate-700 font-serif text-lg  my-4"
+                    {...props}
+                  />
                 ),
 
                 underline: (props) => (
@@ -124,11 +155,119 @@ const postid = ({ post }) => {
                 li: (props) => (
                   <li className="list-decimal text-sm my-4" {...props} />
                 ),
-                blockquote : props => <blockquote className="border-l-4 border-orange-400  pl-4 my-4 text-gray-500" {...props} />,
-              code : props => <code className="p-2 bg-slate-100 font-mono block my-4"  {...props} />
+                blockquote: (props) => (
+                  <blockquote
+                    className="border-l-4 border-orange-400  pl-4 my-4 text-gray-500"
+                    {...props}
+                  />
+                ),
+                code: (props) => (
+                  <code
+                    className="p-2 bg-slate-100 font-mono block my-4"
+                    {...props}
+                  />
+                ),
               }}
             />
           )}
+          {/* comments section  */}
+
+          <div className="my-24 border-t-2 border-lime-600">
+            <p className="text-lime-600 mt-8">Enjoyed post ,</p>
+            <h4 className="text-gray-800 text-xl w-full mb-8">
+              Comment down below
+            </h4>
+            
+            {showForm && (
+              <form onSubmit={handleSubmit(submitForm)} className="w-full">
+                {/* input field */}
+                <div className="w-full max-w-xl ">
+                  <label htmlFor="name" className="text-gray-600 font-sm">
+                    {" "}
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    className="block  w-full outline-none  focus:ring-1 ring-lime-600 border border-gray-400  px-4 mb-2  py-1 mt-2 rounded-md "
+                    {...register("name", { required: "Name is required" })}
+                  />
+                  {errors.name && (
+                    <span className="text-sm mb-6 block text-rose-600">
+                      {errors.name.message}
+                    </span>
+                  )}
+                </div>
+                {/* input field */}
+                <div className="w-full max-w-xl ">
+                  <label htmlFor="email" className="text-gray-600 font-sm">
+                    {" "}
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="block  w-full outline-none  focus:ring-1 ring-lime-600 border border-gray-400  px-4 mb-6  py-1 mt-2 rounded-md "
+                    {...register("email", {
+                      required: "Empty comments are not allowed.",
+                    })}
+                  />
+                  {errors.email && (
+                    <span className="text-sm mb-6 block text-rose-600">
+                      {errors.email.message}
+                    </span>
+                  )}
+                </div>
+                {/* input field */}
+                <div className="w-full max-w-xl ">
+                  <label htmlFor="comment" className="text-gray-600 font-sm">
+                    {" "}
+                    Comment*
+                  </label>
+                  <textarea
+                    type="text"
+                    name="name"
+                    id="comment"
+                    className="block  w-full outline-none  focus:ring-1 ring-lime-600 border border-gray-400  px-4 mb-6  py-1 mt-2 rounded-md "
+                    {...register("comment", { required: "Please enter email" })}
+                  />
+                  {errors.comment && (
+                    <span className="text-sm mb-6 block text-rose-600">
+                      {errors.comment.message}
+                    </span>
+                  )}
+                </div>
+                <input
+                  type="submit"
+                  className="bg-lime-600 hover:bg-lime-700 text-white rounded-md py-2 px-8"
+                  value="Comment"
+                />
+               
+              </form>
+            )}
+            {!showForm && (
+              <div className="my-8 p-6 w-full bg-lime-600 text-white ">
+                <h2 className="text-md font-semibold">
+                  {" "}
+                  Hello there , your Comment has been stored ,& well be shown
+                  below very soon .
+                </h2>
+              </div>
+            )}
+            <div className="my-8 w-full">
+              {comments?.map((obj) => {
+                return (
+                  <div className="border-l-lime-600 border-l-4  relative rounded border-gray-400  border my-4 px-4 py-2">
+                    <h4 className="py-2 font-bold"> {obj.name}</h4>
+                    <p className="text-slate-600">{obj.comment}</p>
+                    <span className="block text-right text-sm5 text-slate-500">{Formatted(obj._createdAt)}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
         {/*current post  author section  */}
 
@@ -193,31 +332,38 @@ const postid = ({ post }) => {
 
 export default postid;
 
-// export const getStaticPaths = async () => {
-//   const query = `*[ _type == "post" ]{slug}`;
-//   const data = await client.fetch(query);
-//   const paths = data.map((obj) => {
-//     return {
-//       params: {
-//         postid: obj.slug.current,
-//       },
-//     };
-//   });
-//   return {
-//     paths :[],
-//     fallback: true,
-//   };
-// };
+export const getStaticPaths = async () => {
+  const query = `*[ _type == "post" ]{slug}`;
+  const data = await client.fetch(query);
+  const paths = data.map((obj) => {
+    return {
+      params: {
+        postid: obj.slug.current,
+      },
+    };
+  });
+  return {
+    paths: paths,
+    fallback: true,
+  };
+};
 
-export const getServerSideProps = async (req, res) => {
+export const getStaticProps = async (req, res) => {
   const { postid } = req.params;
   const query = `*[ _type == "post" && slug.current =="${postid}"]{
     heading , desc , content , author -> {_id , name , profile}, _createdAt,poster
   }`;
   const post = await client.fetch(query);
+
+  const commentQuery = `*[ _type == "comments" && post_id == "${postid}"]`;
+  const comments = await client.fetch(commentQuery);
+
+  
   return {
     props: {
       post: post[0],
+      comments,
     },
   };
 };
+
